@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="src/lightboxjs.min.js"></script>
+    <link rel="stylesheet" href="src/lightboxjs.min.css" type="text/css" />
+
+    <style>
+        body{
+            background-color: #4158D0;
+            background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body>
+<!-- lightboxjs a link -->
+<a href="file_to_open.html" class="lightboxjs-link" data-width="600" data-height="600">OPEN ME 1</a>
+<br><br>
+<!-- lightboxjs div link - this one will not close when clicking the overlay -->
+<div class="lightboxjs-link" data-width="1000" data-height="500" data-url="file_to_open2.html" data-close-with-overlay="0">OPEN ME 2</div>
+<br>
+<!-- works for youtube videos too -->
+<div class="lightboxjs-link" data-width="1000" data-height="600" data-url="https://www.youtube.com/embed/-lkEOEEKYD0?autoplay=1">OPEN VIDEO</div>
+</body>
+</html>
