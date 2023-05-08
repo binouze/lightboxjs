@@ -3,7 +3,7 @@
 }
 
 .lightboxjs,
-.lightboxjs .overlay {
+.lightboxjs .ljs-overlay {
     top: 0;
     left: 0;
     width: 100%;
@@ -18,26 +18,26 @@
     transition: opacity .2s linear, backdrop-filter .2s linear;
     backdrop-filter: blur(10px) brightness(0.35);
 }
-.lightboxjs .overlay,
-.lightboxjs .content {
+.lightboxjs .ljs-overlay,
+.lightboxjs .ljs-content {
     position: absolute;
 }
-.lightboxjs .overlay {
+.lightboxjs .ljs-overlay {
     z-index: 1;
     background: #000;
     opacity: 0.1;
 }
-.lightboxjs .overlay.clickable{
+.lightboxjs .ljs-overlay.ljs-clickable{
     cursor: pointer;
 }
-.lightboxjs .content{
+.lightboxjs .ljs-content{
     display: none;
 }
-.lightboxjs .content.loaded{
+.lightboxjs .ljs-content.ljs-loaded{
     display: block;
     animation: scale-in 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
-.lightboxjs .content {
+.lightboxjs .ljs-content {
     top: 0;
     left: 0;
     bottom: 0;
@@ -51,7 +51,7 @@
     border-radius: 10px;
     overflow: hidden;
 }
-.lightboxjs .body,
+.lightboxjs .ljs-body,
 .lightboxjs iframe {
     width: 100%;
     height: 100%;
@@ -60,16 +60,16 @@
     border: 0;
     display: block;
 }
-.lightboxjs.show {
+.lightboxjs.ljs-show {
     display: block;
 }
-.lightboxjs.open {
+.lightboxjs.ljs-open {
     opacity: 1;
 }
 
 /** SPINNER **/
 
-.lightboxjs .spinner {
+.lightboxjs .ljs-spinner {
     width: 80px;
     height: 80px;
     position: absolute;
@@ -78,11 +78,11 @@
     z-index: 1;
     display: none;
 }
-.lightboxjs .spinner.show{
+.lightboxjs .ljs-spinner.ljs-show{
     display: inline-block;
     animation: scale-in 0.15s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.2s both;
 }
-.lightboxjs .spinner:after {
+.lightboxjs .ljs-spinner:after {
     content: " ";
     display: block;
     width: 64px;
@@ -104,7 +104,7 @@
 
 /** CLOSE BUTTON **/
 
-.lightboxjs .close {
+.lightboxjs .ljs-close {
     position: absolute;
     right: 32px;
     top: 32px;
@@ -119,13 +119,13 @@
     margin-top: -7px;
     text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
 }
-.lightboxjs .close.show{
+.lightboxjs .ljs-close.ljs-show{
     animation: scale-in-btn 0.15s cubic-bezier(0.390, 0.575, 0.565, 1.000) 0.2s both;
 }
-.lightboxjs .close.open{
+.lightboxjs .ljs-close.ljs-open{
     display:block;
 }
-.lightboxjs .close:hover {
+.lightboxjs .ljs-close:hover {
     animation: scale-btn-over 0.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 /*.lightboxjs .close:before, .close:after {

@@ -20,6 +20,9 @@ let LightboxJS = function( elem )
     const closeWithOverlayData = (elem.dataset.closeWithOverlay ?? 1);
     this.closeWithOverlay = closeWithOverlayData !== 0 && closeWithOverlayData !== '0' && closeWithOverlayData !== 'false';
 
+    const showBtnCloseData = (elem.dataset.showBtnClose ?? 1);
+    this.showBtnClose = showBtnCloseData !== 0 && showBtnCloseData !== '0' && showBtnCloseData !== 'false';
+
     if( this.href != null )
     {
         const _this = this;
@@ -55,11 +58,11 @@ LightboxJS.init = function ()
     LightboxJS.closebtn.innerHTML = "&times;";
 
     LightboxJS.el.classList.add('lightboxjs');
-    LightboxJS.overlay.classList.add('overlay');
-    LightboxJS.spinner.classList.add('spinner');
-    LightboxJS.content.classList.add('content');
-    LightboxJS.closebtn.classList.add('close');
-    LightboxJS.body.classList.add('body');
+    LightboxJS.overlay.classList.add('ljs-overlay');
+    LightboxJS.spinner.classList.add('ljs-spinner');
+    LightboxJS.content.classList.add('ljs-content');
+    LightboxJS.closebtn.classList.add('ljs-close');
+    LightboxJS.body.classList.add('ljs-body');
 
     LightboxJS.el.appendChild(this.overlay);
     LightboxJS.el.appendChild(this.closebtn);
@@ -74,14 +77,19 @@ LightboxJS.init = function ()
         if( !LightboxJS.isOpen() )
             return;
 
-        LightboxJS.spinner.classList.remove('show');
-        LightboxJS.content.classList.add('loaded');
-        LightboxJS.closebtn.classList.add('show');
-        LightboxJS.closebtn.classList.add('open');
+        LightboxJS.spinner.classList.remove('ljs-show');
+        LightboxJS.content.classList.add('ljs-loaded');
+
+        // afficher le bouton close si necessaire
+        if( LightboxJS.current.showBtnClose )
+        {
+            LightboxJS.closebtn.classList.add('ljs-show');
+            LightboxJS.closebtn.classList.add('ljs-open');
+        }
 
         const ff = () =>
         {
-            LightboxJS.closebtn.classList.remove('show');
+            LightboxJS.closebtn.classList.remove('ljs-show');
 
             LightboxJS.closebtn.removeEventListener('webkitAnimationEnd', ff, false);
             LightboxJS.closebtn.removeEventListener('mozAnimationEnd',    ff, false);
@@ -112,9 +120,9 @@ LightboxJS.init = function ()
             return;
 
         LightboxJS.frame.src = 'about:blank';
-        LightboxJS.el.classList.remove('show');
-        LightboxJS.closebtn.classList.remove('show');
-        LightboxJS.closebtn.classList.remove('open');
+        LightboxJS.el.classList.remove('ljs-show');
+        LightboxJS.closebtn.classList.remove('ljs-show');
+        LightboxJS.closebtn.classList.remove('ljs-open');
     };
 
     LightboxJS.overlay.addEventListener('click',  closeWithOverlay );
@@ -141,12 +149,12 @@ LightboxJS.init = function ()
 LightboxJS.loadIframe = function (href)
 {
     // show the spinner
-    LightboxJS.spinner.classList.add('show');
+    LightboxJS.spinner.classList.add('ljs-show');
     // hide the content until the url is loaded
-    LightboxJS.content.classList.remove('loaded');
+    LightboxJS.content.classList.remove('ljs-loaded');
     // hide the close button until loaded
-    LightboxJS.closebtn.classList.remove('show');
-    LightboxJS.closebtn.classList.remove('open');
+    LightboxJS.closebtn.classList.remove('ljs-show');
+    LightboxJS.closebtn.classList.remove('ljs-open');
     // set the iframe url
     LightboxJS.frame.src = href;
 };
@@ -162,15 +170,15 @@ LightboxJS.prototype.open = function ()
     LightboxJS.loadIframe(this.href);
 
     // show the lightbox parent element
-    LightboxJS.el.classList.add('show');
+    LightboxJS.el.classList.add('ljs-show');
     LightboxJS.el.offsetHeight; // without this, the css transition don't work
-    LightboxJS.el.classList.add('open');
+    LightboxJS.el.classList.add('ljs-open');
 
     // update the class of the overlay to show or not the clickable pointer
     if( !this.closeWithOverlay )
-        LightboxJS.overlay.classList.remove('clickable');
+        LightboxJS.overlay.classList.remove('ljs-clickable');
     else
-        LightboxJS.overlay.classList.add('clickable');
+        LightboxJS.overlay.classList.add('ljs-clickable');
 
     // enregistrer l'instance en cours d'ouverture
     LightboxJS.current = this;
@@ -183,13 +191,13 @@ LightboxJS.close = function ()
 {
     // hide the lightbox parent element
     // this starts the hide transition
-    LightboxJS.el.classList.remove('open');
+    LightboxJS.el.classList.remove('ljs-open');
 }
 
 LightboxJS.isOpen = function ()
 {
     // true if the lightbox is open
-    return LightboxJS.el.classList.contains('open');
+    return LightboxJS.el.classList.contains('ljs-open');
 };
 
 // define the with and height of the iframe
