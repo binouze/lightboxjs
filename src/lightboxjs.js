@@ -143,6 +143,46 @@ LightboxJS.init = function ()
     this.el.addEventListener('msTransitionEnd',     f, false);
 };
 
+
+LightboxJS.stadalone = null;
+/**
+ * open an url in a laightbox
+ * @param {string}  url              the url
+ * @param {int}     width            optionnal the width of the lighbox (default 1000px)
+ * @param {int}     height           optionnal the height of the lighbox (default 600px)
+ * @param {boolean} closeWithOverlay optionnal should the lightbox be closed when clicking on the overlay (default true)
+ * @param {boolean} showBtnClose     optionnal show a close button (default true)
+ */
+LightboxJS.openUrl = function(url, width = 1000, height = 600, closeWithOverlay = true, showBtnClose = true)
+{
+    // initialize if not already done
+    if( !LightboxJS.isInit )
+    {
+        LightboxJS.init();
+        LightboxJS.isInit = true;
+    }
+
+    // create a blank element
+    if( LightboxJS.stadalone == null )
+    {
+        let itm = document.createElement('div');
+        itm.dataset.url   = 'to-be-defined-later';
+        itm.style.display = 'none';
+        document.body.appendChild(itm);
+        LightboxJS.stadalone = new LightboxJS(itm);
+    }
+
+    // set properties
+    LightboxJS.stadalone.href             = url;
+    LightboxJS.stadalone.width            = width;
+    LightboxJS.stadalone.height           = height;
+    LightboxJS.stadalone.closeWithOverlay = closeWithOverlay;
+    LightboxJS.stadalone.showBtnClose     = showBtnClose;
+
+    // open
+    LightboxJS.stadalone.open();
+}
+
 /**
  * Load the url in the iframe
  */

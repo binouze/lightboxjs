@@ -7,13 +7,53 @@
     <script src="https://cdn.jsdelivr.net/gh/binouze/lightboxjs/src/lightboxjs.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/binouze/lightboxjs/src/lightboxjs.min.css" type="text/css" />
 
+    <!--<script src="/src/lightboxjs.js"></script>
+    <link rel="stylesheet" href="/src/lightboxjs.css" type="text/css" />-->
+
     <style>
         body{
             background-color: #4158D0;
             background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
             background-attachment: fixed;
         }
+
+        .button-test {
+            background-color: #405cf5;
+            border-radius: 6px;
+            box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,
+                        rgba(50, 50, 93, .1) 0 2px 5px 0,
+                        rgba(0, 0, 0, .07) 0 1px 1px 0;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
+            margin: 12px;
+            padding: 10px 25px;
+            text-align: center;
+            transition: all .2s,
+                        box-shadow .08s ease-in;
+            user-select: none;
+            -webkit-user-select: none;
+            width: fit-content;
+        }
+        .button-test:hover{
+            margin: 10px;
+            padding: 12px 27px;
+        }
+        .button-test:focus {
+            box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,
+                        rgba(50, 50, 93, .2) 0 6px 15px 0,
+                        rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+        }
     </style>
+
+    <script>
+        function open_url()
+        {
+            const url = "https://www.youtube.com/embed/-lkEOEEKYD0?autoplay=1";
+            LightboxJS.openUrl(url);
+        }
+    </script>
 </head>
 <body>
 <!-- lightboxjs a link -->
@@ -24,5 +64,8 @@
 <br>
 <!-- works for youtube videos too -->
 <div class="lightboxjs-link" data-width="1000" data-height="600" data-url="https://www.youtube.com/embed/-lkEOEEKYD0?autoplay=1">OPEN VIDEO</div>
+<!-- open a link with js -->
+<div class="button-test" onclick="open_url()">OPEN URL</div>
+
 </body>
 </html>
