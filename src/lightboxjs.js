@@ -23,6 +23,8 @@ let LightboxJS = function( elem )
     const showBtnCloseData = (elem.dataset.showBtnClose ?? 1);
     this.showBtnClose = showBtnCloseData !== 0 && showBtnCloseData !== '0' && showBtnCloseData !== 'false';
 
+    this.onCloseAction = (elem.dataset.onCloseAction ?? null);
+
     if( this.href != null )
     {
         const _this = this;
@@ -145,15 +147,27 @@ LightboxJS.init = function ()
 
 
 LightboxJS.stadalone = null;
+
+/** @var {function} onCloseAction a function to call when a frame is closed */
+LightboxJS.onCloseAction = null;
+
 /**
  * open an url in a laightbox
- * @param {string}  url              the url
- * @param {int}     width            optionnal the width of the lighbox (default 1000px)
- * @param {int}     height           optionnal the height of the lighbox (default 600px)
- * @param {boolean} closeWithOverlay optionnal should the lightbox be closed when clicking on the overlay (default true)
- * @param {boolean} showBtnClose     optionnal show a close button (default true)
+ * @param {string|object}  urlOrParams      the url or params array
+ * @param {int}           width            optionnal the width of the lighbox (default 1000px)
+ * @param {int}           height           optionnal the height of the lighbox (default 600px)
+ * @param {boolean}       closeWithOverlay optionnal should the lightbox be closed when clicking on the overlay (default true)
+ * @param {boolean}       showBtnClose     optionnal show a close button (default true)
+ * @param {function}      onCloseAction    optionnal an function to call when lightbox is closed (default null)
+ *
+ * @param {string}   urlOrParams.url
+ * @param {int}      urlOrParams.width
+ * @param {int}      urlOrParams.height
+ * @param {boolean}  urlOrParams.closeWithOverlay
+ * @param {boolean}  urlOrParams.showBtnClose
+ * @param {function} urlOrParams.onCloseAction
  */
-LightboxJS.openUrl = function(url, width = 1000, height = 600, closeWithOverlay = true, showBtnClose = true)
+LightboxJS.openUrl = function(urlOrParams, width = 1000, height = 600, closeWithOverlay = true, showBtnClose = true, onCloseAction = null)
 {
     // initialize if not already done
     if( !LightboxJS.isInit )
@@ -161,6 +175,19 @@ LightboxJS.openUrl = function(url, width = 1000, height = 600, closeWithOverlay 
         LightboxJS.init();
         LightboxJS.isInit = true;
     }
+
+    let url = urlOrParams;
+    if( (urlOrParams.url ?? null) != null )
+    {
+        url              = urlOrParams.url;
+        width            = urlOrParams.width            ?? 1000;
+        height           = urlOrParams.height           ?? 600;
+        closeWithOverlay = urlOrParams.closeWithOverlay ?? true;
+        showBtnClose     = urlOrParams.showBtnClose     ?? true;
+        onCloseAction    = urlOrParams.onCloseAction    ?? null;
+    }
+
+    console.log('openURL: ',url, urlOrParams)
 
     // create a blank element
     if( LightboxJS.stadalone == null )
@@ -178,6 +205,7 @@ LightboxJS.openUrl = function(url, width = 1000, height = 600, closeWithOverlay 
     LightboxJS.stadalone.height           = height;
     LightboxJS.stadalone.closeWithOverlay = closeWithOverlay;
     LightboxJS.stadalone.showBtnClose     = showBtnClose;
+    LightboxJS.stadalone.onCloseAction    = onCloseAction;
 
     // open
     LightboxJS.stadalone.open();
@@ -229,9 +257,23 @@ LightboxJS.prototype.open = function ()
  */
 LightboxJS.close = function ()
 {
-    // hide the lightbox parent element
-    // this starts the hide transition
-    LightboxJS.el.classList.remove('ljs-open');
+    // if the lighbox is open
+    if( LightboxJS.isOpen() )
+    {
+        // see if there is a close action defined
+        const closeAction = LightboxJS.current.onCloseAction ?? null;
+        if( closeAction != null )
+            closeAction.apply(LightboxJS.current);
+
+        // call the global function if defined
+        const globalCloseAction = LightboxJS.onCloseAction ?? null;
+        if( globalCloseAction != null )
+            globalCloseAction.apply(LightboxJS.current);
+
+        // hide the lightbox parent element
+        // this starts the hide transition
+        LightboxJS.el.classList.remove('ljs-open');
+    }
 }
 
 LightboxJS.isOpen = function ()
@@ -243,8 +285,6 @@ LightboxJS.isOpen = function ()
 // define the with and height of the iframe
 LightboxJS.setDimensions = function (w, h)
 {
-    //this.width  = w;
-    //this.height = h;
     LightboxJS.content.style.width  = w + 'px';
     LightboxJS.content.style.height = h + 'px';
 };

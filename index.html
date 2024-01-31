@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <script src="https://cdn.jsdelivr.net/gh/binouze/lightboxjs/src/lightboxjs.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/binouze/lightboxjs/src/lightboxjs.min.css" type="text/css" />
+    <!--<script src="https://cdn.jsdelivr.net/gh/binouze/lightboxjs/src/lightboxjs.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/binouze/lightboxjs/src/lightboxjs.min.css" type="text/css" />-->
 
-    <!--<script src="/src/lightboxjs.js"></script>
-    <link rel="stylesheet" href="/src/lightboxjs.css" type="text/css" />-->
+    <script src="/src/lightboxjs.js"></script>
+    <link rel="stylesheet" href="/src/lightboxjs.css" type="text/css" />
 
     <style>
         body{
@@ -51,8 +51,22 @@
         function open_url()
         {
             const url = "https://www.youtube.com/embed/-lkEOEEKYD0?autoplay=1";
-            LightboxJS.openUrl(url);
+            LightboxJS.openUrl(
+                {
+                    url:url,
+                    closeWithOverlay:false,
+                    onCloseAction:() => {
+                        console.log('closed frame !');
+                }
+            });
         }
+
+        function lighboxclosed()
+        {
+            console.log('global closed frame !');
+        }
+
+        LightboxJS.onCloseAction = lighboxclosed;
     </script>
 </head>
 <body>
