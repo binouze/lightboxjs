@@ -285,8 +285,8 @@ LightboxJS.isOpen = function ()
 // define the with and height of the iframe
 LightboxJS.setDimensions = function (w, h)
 {
-    LightboxJS.content.style.width  = w + 'px';
-    LightboxJS.content.style.height = h + 'px';
+    LightboxJS.content.style.width  = isNaN(w) ? w : w + 'px';
+    LightboxJS.content.style.height = isNaN(h) ? h : h + 'px';
 };
 
 
