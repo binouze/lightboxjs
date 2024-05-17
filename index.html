@@ -45,6 +45,16 @@
                         rgba(50, 50, 93, .2) 0 6px 15px 0,
                         rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
         }
+
+        .fullscreencontent{
+            width: 100%;
+            height:100%;
+            background: #111;
+            color:#fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 
     <script>
@@ -68,6 +78,37 @@
             console.log('global closed frame !');
         }
 
+        function open_content()
+        {
+            LightboxJS.openUrl(
+            {
+                url:'',
+                closeWithOverlay:false,
+                width:'calc( 100vw - 100px )',
+                height:'calc( 100vh - 100px )',
+                onCloseAction:() => {
+                    console.log('closed frame !');
+                },
+                htmlContent:"<div class='fullscreencontent'>HI THERE HTML CONTENT  <div onclick='open_content2()'>CLICK HERE TO SHOW THE SECOND PART</div></div>"
+            });
+        }
+
+        function open_content2()
+        {
+            LightboxJS.openUrl(
+            {
+                url:'',
+                closeWithOverlay:false,
+                width:'calc( 100vw - 100px )',
+                height:'calc( 100vh - 100px )',
+                onCloseAction:() => {
+                    console.log('closed frame !');
+                },
+                htmlContent:"<div class='fullscreencontent'>HI THERE HTML CONTENT 2 <div onclick='open_content()'>CLICK HERE TO GO BACK TO THE PREVIOUS CONTENT</div></div>",
+                noAnimIfAlreadyOpened: true
+            });
+        }
+
         LightboxJS.onCloseAction = lighboxclosed;
     </script>
 </head>
@@ -82,6 +123,7 @@
 <div class="lightboxjs-link" data-width="1000" data-height="600" data-url="https://www.youtube.com/embed/-lkEOEEKYD0?autoplay=1">OPEN VIDEO</div>
 <!-- open a link with js -->
 <div class="button-test" onclick="open_url()">OPEN URL</div>
-
+<!-- show an content in a frame -->
+<div class="button-test" onclick="open_content()">OPEN URL</div>
 </body>
 </html>

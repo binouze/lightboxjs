@@ -74,7 +74,7 @@ LightboxJS.init = function ()
     LightboxJS.body.append(this.frame);
     document.body.appendChild(this.el);
 
-    LightboxJS.frame.onload = () =>
+    LightboxJS.frame.onload = LightboxJS.onload;/*() =>
     {
         if( !LightboxJS.isOpen() )
             return;
@@ -103,7 +103,7 @@ LightboxJS.init = function ()
         LightboxJS.closebtn.addEventListener('mozAnimationEnd',    ff, false);
         LightboxJS.closebtn.addEventListener('msAnimationEnd',     ff, false);
         LightboxJS.closebtn.addEventListener('animationend',       ff, false);
-    };
+    };*/
 
     const closeWithOverlay = () =>
     {
@@ -146,6 +146,38 @@ LightboxJS.init = function ()
 };
 
 
+LightboxJS.onload = function()
+{
+    if( !LightboxJS.isOpen() )
+        return;
+
+    LightboxJS.spinner.classList.remove('ljs-show');
+    LightboxJS.content.classList.add('ljs-loaded');
+
+    // afficher le bouton close si necessaire
+    if( LightboxJS.current.showBtnClose )
+    {
+        LightboxJS.closebtn.classList.add('ljs-show');
+        LightboxJS.closebtn.classList.add('ljs-open');
+    }
+
+    const ff = () =>
+    {
+        LightboxJS.closebtn.classList.remove('ljs-show');
+
+        LightboxJS.closebtn.removeEventListener('webkitAnimationEnd', ff, false);
+        LightboxJS.closebtn.removeEventListener('mozAnimationEnd',    ff, false);
+        LightboxJS.closebtn.removeEventListener('msAnimationEnd',     ff, false);
+        LightboxJS.closebtn.removeEventListener('animationend',       ff, false);
+    }
+
+    LightboxJS.closebtn.addEventListener('webkitAnimationEnd', ff, false);
+    LightboxJS.closebtn.addEventListener('mozAnimationEnd',    ff, false);
+    LightboxJS.closebtn.addEventListener('msAnimationEnd',     ff, false);
+    LightboxJS.closebtn.addEventListener('animationend',       ff, false);
+}
+
+
 LightboxJS.stadalone = null;
 
 /** @var {function} onCloseAction a function to call when a frame is closed */
@@ -154,11 +186,11 @@ LightboxJS.onCloseAction = null;
 /**
  * open an url in a laightbox
  * @param {string|object}  urlOrParams      the url or params array
- * @param {int}           width            optionnal the width of the lighbox (default 1000px)
- * @param {int}           height           optionnal the height of the lighbox (default 600px)
- * @param {boolean}       closeWithOverlay optionnal should the lightbox be closed when clicking on the overlay (default true)
- * @param {boolean}       showBtnClose     optionnal show a close button (default true)
- * @param {function}      onCloseAction    optionnal an function to call when lightbox is closed (default null)
+ * @param {int}            width            optionnal the width of the lighbox (default 1000px)
+ * @param {int}            height           optionnal the height of the lighbox (default 600px)
+ * @param {boolean}        closeWithOverlay optionnal should the lightbox be closed when clicking on the overlay (default true)
+ * @param {boolean}        showBtnClose     optionnal show a close button (default true)
+ * @param {function}       onCloseAction    optionnal an function to call when lightbox is closed (default null)
  *
  * @param {string}   urlOrParams.url
  * @param {int}      urlOrParams.width
@@ -166,6 +198,8 @@ LightboxJS.onCloseAction = null;
  * @param {boolean}  urlOrParams.closeWithOverlay
  * @param {boolean}  urlOrParams.showBtnClose
  * @param {function} urlOrParams.onCloseAction
+ * @param {string}   urlOrParams.htmlContent            optionnal an HTML content to show instead of an URL (default null)
+ * @param {string}   urlOrParams.noAnimIfAlreadyOpened  optionnal if true and the frame is already shown, no anim effect (default null)
  */
 LightboxJS.openUrl = function(urlOrParams, width = 1000, height = 600, closeWithOverlay = true, showBtnClose = true, onCloseAction = null)
 {
@@ -207,9 +241,21 @@ LightboxJS.openUrl = function(urlOrParams, width = 1000, height = 600, closeWith
     LightboxJS.stadalone.showBtnClose     = showBtnClose;
     LightboxJS.stadalone.onCloseAction    = onCloseAction;
 
-    // open
-    LightboxJS.stadalone.open();
+    // we can prevent the reopening animation if it's already opened
+    if( !LightboxJS.isOpen() || (urlOrParams.noAnimIfAlreadyOpened ?? null) !== true )
+        LightboxJS.stadalone.open();
+
+    // set an HTML content instead of an URL
+    if( (urlOrParams.htmlContent ?? null) != null )
+    {
+        // change content
+        LightboxJS.body.innerHTML = urlOrParams.htmlContent;
+        // fake onLoad to show the frame
+        LightboxJS.onload();
+    }
 }
+
+
 
 /**
  * Load the url in the iframe
